@@ -5,19 +5,40 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Snake Game JS</title>
+  <title>Snake JS</title>
   <style>
+    #main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: monospace;
+      font-size: .8em;
+      color: #456;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0;
+    }
+
     #area {
       background: #dadada;
       width: 120px;
       height: 120px;
+      margin: 0 auto;
+      display: block;
     }
   </style>
 </head>
 
 <body>
-  <!-- <h1>Shake Game JS</h1> -->
-  <canvas id="area"></canvas>
+  <div id="main">
+    <h1>Shake JS</h1>
+    <canvas id="area"></canvas>
+    <span>Speed in milliseconds</span>
+    <input type="text" oninput="changeTimer(this.value)" value="500">
+  </div>
   <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
   <script src="./main.js"></script>
 </body>
