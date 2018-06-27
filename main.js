@@ -1,15 +1,15 @@
 var snake = new function() {
 
-  var config = { size: 0 };
+  var size = 0;
 
   this.food = {};
   this.items = [{ x: 0, y: 0, direction: 'right' }];
 
   this.catchFood = function() {
 
-    var first = this.items[0];
-    var direction = first.direction;
-    var food = Object.assign({}, this.food);
+    var first = this.items[0],
+        direction = first.direction,
+        food = Object.assign({}, this.food);
 
     if (first.x === food.x && first.y === food.y) {
       this.items.unshift(food);
@@ -24,8 +24,8 @@ var snake = new function() {
 
     var food = this.food;
 
-    food.x = _.random(1, config.size - 1);
-    food.y = _.random(0, config.size - 1);
+    food.x = _.random(1, size - 1);
+    food.y = _.random(0, size - 1);
 
     var match = this.items.find(item => {
       return item.x === food.x && item.y === food.y;
@@ -71,41 +71,38 @@ var snake = new function() {
   }
 
   this.up = function(item) {
-    item.y > 0 ? item.y-- : item.y = config.size - 1;
+    item.y > 0 ? item.y-- : item.y = size - 1;
   }
 
   this.down = function(item) {
-    item.y < config.size - 1 ? item.y++ : item.y = 0;
+    item.y < size - 1 ? item.y++ : item.y = 0;
   }
 
   this.left = function(item) {
-    item.x > 0 ? item.x-- : item.x = config.size - 1;
+    item.x > 0 ? item.x-- : item.x = size - 1;
   }
 
   this.right = function(item) {
-    item.x < config.size - 1 ? item.x++ : item.x = 0;
+    item.x < size - 1 ? item.x++ : item.x = 0;
   }
 
-  this.init = function(size) {
-    config.size = size;
+  this.init = function(_size) {
+    size = _size;
     this.addFood();
   }
 }
 
 var render = new function() {
 
-  var config = {
-    size: 0
-  };
+  var size = 0;
 
   this.run = function(matrix, food) {
 
-    var size = config.size * 10;
     var canvas = document.querySelector('#area');
     var ctx = canvas.getContext('2d');
 
     ctx.clearRect(0, 0, size, size);
-    ctx.fillStyle = '#000000';
+    ctx.fillStyle = '#000';
 
     canvas.width = canvas.height = size;
 
@@ -122,20 +119,16 @@ var render = new function() {
     console.table(matrix);
   }
 
-  this.gameOver = function() {
-    alert('Game Over!');
-  }
-
-  this.init = function(size) {
-    config.size = size;
+  this.init = function(_size) {
+    size = _size * 10;
   }
 }
 
 var app = new function() {
 
-  var timerId = null;
-  var direction = 'right';
-  var speed = 500;
+  var timerId = null,
+      direction = 'right',
+      speed = 300;
 
   var run = function() {
 
@@ -144,7 +137,7 @@ var app = new function() {
 
     if (!snake.isAlive()) {
       clearInterval(timerId);
-      render.gameOver();
+      alert('Game Over!');
     }
   };
 
@@ -158,7 +151,8 @@ var app = new function() {
 
   this.init = function(size) {
 
-    var _direction, mapDirections;
+    var _direction,
+        mapDirections;
 
     render.init(size);
     snake.init(size);
@@ -177,6 +171,6 @@ var app = new function() {
 
 app.init(12);
 
-var changeTimer = function(time) {
+function changeTimer(time) {
   app.setSpeed(1 * time);
 }
