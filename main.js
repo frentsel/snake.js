@@ -3,13 +3,19 @@ var snake = new function() {
   var size = 0;
 
   this.food = {};
-  this.items = [{ x: 0, y: 0, direction: 'right' }];
+  this.items = [
+    {
+      x: 0,
+      y: 0,
+      direction: 'right'
+    }
+  ];
 
   this.catchFood = function() {
 
-    var first = this.items[0],
-        direction = first.direction,
-        food = Object.assign({}, this.food);
+    var first = this.items[0];
+    var direction = first.direction;
+    var food = Object.assign({}, this.food);
 
     if (first.x === food.x && first.y === food.y) {
       this.items.unshift(food);
@@ -96,6 +102,10 @@ var render = new function() {
 
   var size = 0;
 
+  this.gameOver = function(score) {
+    alert(`Game Over!, Your score is ${score}`);
+  };
+
   this.run = function(matrix, food) {
 
     var canvas = document.querySelector('#area');
@@ -126,10 +136,9 @@ var render = new function() {
 
 var app = new function() {
 
-  var timerId = null,
-      direction = 'right',
-      speed = 300;
-
+  var timerId = null;
+  var direction = 'right';
+  var speed = 300;
   var run = function() {
 
     snake.move(direction);
@@ -137,30 +146,37 @@ var app = new function() {
 
     if (!snake.isAlive()) {
       clearInterval(timerId);
-      alert('Game Over!');
+      render.gameOver(snake.items.length);
     }
   };
 
-  this.setSpeed = function(speed) {
+  this.setSpeed = function(time) {
+
+    var speed = 1 * time;
 
     if (_.isFinite(speed)) {
       clearInterval(timerId);
       timerId = setInterval(run, speed);
     }
-  };
+  }
 
   this.init = function(size) {
 
-    var _direction,
-        mapDirections;
+    var _direction;
+    var mapDirections;
 
     render.init(size);
     snake.init(size);
     timerId = setInterval(run, speed);
-    document.querySelector('body').onkeydown = function(event) {
+    document.body.onkeydown = function({ key }) {
 
-      _direction = event.key.replace('Arrow', '').toLowerCase();
-      mapDirections = { up: 1, down: 1, left: 2, right: 2 };
+      _direction = key.replace('Arrow', '').toLowerCase();
+      mapDirections = {
+        up: 1,
+        down: 1,
+        left: 2,
+        right: 2
+      };
 
       if (mapDirections[_direction] && mapDirections[direction] !== mapDirections[_direction]) {
         direction = _direction;
@@ -170,7 +186,3 @@ var app = new function() {
 }
 
 app.init(12);
-
-function changeTimer(time) {
-  app.setSpeed(1 * time);
-}
